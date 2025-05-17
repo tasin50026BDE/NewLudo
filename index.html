@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludo Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #002e5f;
+            color: white;
+        }
+        #gameContainer {
+            margin-top: 20px;
+            position: relative;
+        }
+        #ludoBoard {
+            max-width: 90vw;
+            max-height: 90vh;
+            border: 4px solid #fff;
+        }
+        #startButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        #startButton:hover {
+            background-color: #45a049;
+        }
+        #status {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ludo Game</h1>
+    <button id="startButton">Start Game</button>
+    <div id="gameContainer">
+        <img id="ludoBoard" src="/mnt/data/409382ee-2231-404e-b237-39e61934f7bc.png" alt="Ludo Board">
+    </div>
+    <div id="status"></div>
+
+    <script>
+        document.getElementById("startButton").addEventListener("click", function() {
+            document.getElementById("status").textContent = "Game Started! Roll the dice to begin.";
+            // Additional logic for game initialization can be added here
+        });
+    </script>
+</body>
+</html>
