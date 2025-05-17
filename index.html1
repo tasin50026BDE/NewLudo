@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Ludo Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #002e5f;
+      color: white;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(5, 60px);
+      grid-template-rows: repeat(5, 60px);
+      margin: 20px auto;
+      gap: 2px;
+    }
+    .cell {
+      width: 60px;
+      height: 60px;
+      background-color: #ccc;
+      border: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .start-red {
+      background-color: red;
+    }
+    .start-green {
+      background-color: green;
+    }
+    .token-red {
+      background-color: red;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+    }
+    .token-green {
+      background-color: green;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+    }
+    #controls {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simple Ludo Game</h1>
+  <button id="startBtn">Start Game</button>
+  <div id="controls" style="display:none;">
+    <button id="rollBtn">Roll Dice</button>
+    <p>Dice: <span id="dice">-</span></p>
+    <p>Turn: <span id="turn">Red</span></p>
+  </div>
+  <div id="board"></div>
+  <div id="status"></div>
+
+  <script>
+    const board = document.getElementById("board");
+    const diceEl = document.getElementById("dice");
+    const turnEl = document.getElementById("turn");
+    const statusEl = document.getElementById("status");
+    let turn = "red";
+    let redPos = 0;
+    let greenPos = 0;
+    const path = Array.from({ length: 25 }, (_, i) => i);
+
+    function createBoard() {
+      board.innerHTML = "";
+      for (let i = 0; i < 25; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.id = `cell-${i}`;
+        if (i === 0) cell.classList.add("start-red");
+        if (i === 24) cell.classList.add("start-green");
+        board.appendChild(cell);
+      }
+    }
+
+    function updateTokens() {
+      path.forEach(i => {
+        const cell = document.getElementById(`cell-${i}`);
+        cell.innerHTML = "";
+      });
+      const redCell = document.getElementById(`cell-${redPos}`);
+      const greenCell = document.getElementById(`cell-${greenPos}`);
+      const redToken = document.createElement("div");
+      redToken.classList.add("token-red");
+      redCell.appendChild(redToken);
+      const greenToken = document.createElement("div");
+      greenToken.classList.add("token-green");
+      greenCell.appendChild(greenToken);
+    }
+
+    function rollDice() {
+      const roll = Math.floor(Math.random() * 6) + 1;
+      diceEl.textContent = roll;
+      if (turn === "red") {
+        redPos = Math.min(redPos + roll, 24);
+        turn = "green";
+      } else {
+        greenPos = Math.min(greenPos + roll, 24);
+        turn = "red";
+      }
+      updateTokens();
+      turnEl.textContent = turn.charAt(0).toUpperCase() + turn.slice(1);
+
+      if (redPos === 24) {
+        statusEl.textContent = "Red Wins!";
+        document.getElementById("rollBtn").disabled = true;
+      } else if (greenPos === 24) {
+        statusEl.textContent = "Green Wins!";
+        document.getElementById("rollBtn").disabled = true;
+      }
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      redPos = 0;
+      greenPos = 0;
+      turn = "red";
+      diceEl.textContent = "-";
+      statusEl.textContent = "";
+      document.getElementById("controls").style.display = "block";
+      document.getElementById("rollBtn").disabled = false;
+      turnEl.textContent = "Red";
+      createBoard();
+      updateTokens();
+    });
+
+    document.getElementById("rollBtn").addEventListener("click", rollDice);
+  </script>
+</body>
+</html>
